@@ -117,6 +117,7 @@ GraphSAGE layers compute **node embeddings** by aggregating information from a n
    - Aggregates messages using summation.
 4. **Node Feature Update**: Combines current node features and aggregated messages to produce updated node representations.
 5. **Output**: Updated node features and edge features.
+
 ---
 
 
