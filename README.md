@@ -1,4 +1,4 @@
-### GraphSAGE For Solving the Traveling Salesman Problem (TSP)
+## GraphSAGE For Solving the Traveling Salesman Problem (TSP)
 
 how to use a graph neural network (GNN) architecture combining **GraphSAGE** layers to solve the Traveling Salesman Problem (TSP). The model is based on the approach described in the paper **"GatedGCN with GraphSAGE to Solve Traveling Salesman Problem" by Hua Yang**. We'll walk through the process of building and training this architecture on a dataset of graphs with varying sizes.
 
@@ -23,30 +23,11 @@ https://drive.google.com/drive/folders/10xyd_WaxhTcWhvRD57B53hibQ6zxH3l_?usp=sha
 
 ---
 
-### **Model Architecture**
-The model combines two key components:
-1. **GraphSAGE Layers**: Learn node embeddings by aggregating features from local neighborhoods.
-2. **GatedGCN**: Capture global relationships through a gated mechanism that enhances node representations using edge features.
-
-The final step predicts edge probabilities, indicating whether an edge is part of the optimal TSP route.
-
----
-
-### **Step-by-Step Implementation**
-
-#### **1. Prerequisites**
-Install necessary libraries:
-```bash
-pip install torch torch-geometric
-```
-
-#### **Model Structure**
-
+## **Model Architecture**
 This model, based on the paper **"GatedGCN with GraphSAGE to Solve the Traveling Salesman Problem" by Hua Yang**, is structured to efficiently process graph data and predict optimal TSP solutions. Below, each component of the model is described in detail, including the underlying calculations.
 
----
+### **1. Input Layer**
 
-#### **1. Input Layer**
 The input to the model consists of:
 - **Node Features (`x`)**: Represents the 2D coordinates of cities in the TSP graph. These are embedded into a higher-dimensional space (`d` dimensions) for richer representations.
 - **Edge Features (`edge_attr`)**: Represents pairwise distances or other attributes between cities.
@@ -86,11 +67,11 @@ edge_features = torch.cat([
 ```
 ---
 
-#### **2. GraphSAGE Layers (Message-Passing GCN Layer)**
+### **2. GraphSAGE Layers (Message-Passing GCN Layer)**
 GraphSAGE layers compute **node embeddings** by aggregating information from a node's neighbors. The update rule for the \(m\)-th layer is:
 
 
-### **`update_edge_features`**
+#### **`update_edge_features`**
 **Purpose**: Update edge features based on the current node features and edge features.
 - **Steps**:
   1. Extracts source (`row`) and target (`col`) node indices from `edge_index`.
@@ -103,7 +84,7 @@ GraphSAGE layers compute **node embeddings** by aggregating information from a n
 
 ---
 
-### **`message`**
+#### **`message`**
 **Purpose**: Generate messages to send to neighboring nodes during propagation.
 - **Parameters**:
   - `x_j`: Features of neighboring nodes.
@@ -116,7 +97,7 @@ GraphSAGE layers compute **node embeddings** by aggregating information from a n
 
 ---
 
-### **`update`**
+#### **`update`**
 **Purpose**: Update the features of each node after aggregating messages.
 - **Parameters**:
   - `aggr_out`: Aggregated messages from neighboring nodes.
@@ -128,7 +109,7 @@ GraphSAGE layers compute **node embeddings** by aggregating information from a n
 
 ---
 
-### **Summary of Data Flow in `CustomGCNLayer`**
+#### **Summary of Data Flow in `CustomGCNLayer`**
 1. **Input**: Node features (`x`), edge indices (`edge_index`), and edge features (`edge_attr`).
 2. **Edge Feature Update**: Combines node and edge features to refine edge representations.
 3. **Message Passing**:
@@ -139,7 +120,7 @@ GraphSAGE layers compute **node embeddings** by aggregating information from a n
 ---
 
 
-#### **3. Edge Prediction (MLP Classifier Layer)**
+### **3. Edge Prediction (MLP Classifier Layer)**
 The MLPClassifierLayer is a key component for classifying edges in a graph, used to determine if an edge is part of a Traveling Salesman Problem (TSP) tour.
 
 The final step predicts the probability of each edge being part of the TSP solution. For each edge \((i, j)\):
@@ -203,7 +184,7 @@ Use the predicted edges to construct a tour or visualize the graph.
 
 ---
 
-### **Full Model Code**
+## **Full Model Code**
 ```python
 import torch
 import torch.nn as nn
